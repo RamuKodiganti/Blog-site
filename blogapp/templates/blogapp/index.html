@@ -1,0 +1,35 @@
+{% extends 'blogapp/base.html' %}
+
+{% block content %}
+    <div class="text-center">
+        <div class="row text-center">
+            <div class="my-4">
+                <h1>Django Blog</h1>
+            </div>
+        </div>
+
+        {% for object in object_list %}
+
+            <div class="row text-center" style="padding: 0 5vw; border: 1px solid rgb(240, 240, 240); width: 60vw; margin: auto; box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);">
+                <div class="my-4">
+                    <strong><h3 class="my-2" style="text-align: left;">{{object.title}}</h3></strong>
+                    <p class="my-2 text-muted" style="text-align: left;">Posted by <strong>{{object.author.username}}</strong> on {{object.date}}</p>
+                    {% if object.likes.count == 1 %}
+                        <p class="text-muted" style="text-align: left;"><strong>{{object.likes.count}}</strong> person likes this post.</p>
+                    {% else %}
+                        <p class="text-muted" style="text-align: left;"><strong>{{object.likes.count}}</strong> people like this post.</p>
+                    {% endif %}
+                    
+                    <div class="" style="text-align: left;">
+                        {{object.content|truncatewords_html:30|safe}}<a href="{% url 'detail_article' object.id %}">Read More</a>
+                    </div>
+                
+                </div>
+
+            </div>
+
+        {% endfor %}
+    </div>
+    
+
+{% endblock content %}

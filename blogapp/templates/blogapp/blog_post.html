@@ -1,0 +1,59 @@
+{% extends 'blogapp/base.html' %}
+
+{% block content %}
+
+<div class="container" style="width: 60%;">
+
+    <div class="row my-4">
+        <div>
+            <a class="btn btn-outline-secondary my-4" href="{% url 'index' %}">Go Back</a>
+        </div>
+    </div>
+
+    <div class="row my-4">
+        <div class="">
+            <h1>{{object.title}}</h1>
+            <p class="my-2 text-muted" style="text-align: left;">Posted by <strong>{{object.author.username}}</strong> on {{object.date}}</p>
+            
+            {% if request.user.username == object.author.username %}
+                <a href="{% url 'delete_article' object.pk %}">Delete this post</a>
+            {% endif %}
+            
+            <div class="" style="text-align: left;">
+                {{object.content|safe}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-4">
+        <div class="my-4">
+            {% if object.likes.count == 1 %}
+            <p class="text-muted" style="text-align: left;"><strong>{{object.likes.count}}</strong> person likes this post.
+            </p>
+            {% else %}
+            <p class="text-muted" style="text-align: left;"><strong>{{object.likes.count}}</strong> people like this post.
+            </p>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+                {% if liked_by_user %}
+                    <form action="{% url 'like_article' object.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary"><ion-icon name="heart-dislike-outline" style="margin: -2px 2px;"></ion-icon> Unlike this post.</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'like_article' object.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger"><ion-icon name="heart-outline" style="margin: -2px 2px;"></ion-icon> Like this post.</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <button class="btn btn-outline-danger" disabled><ion-icon name="heart-outline" style="margin: -2px 2px;"></ion-icon> Login to like this post</button>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
